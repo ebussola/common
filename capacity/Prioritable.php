@@ -1,6 +1,6 @@
 <?php
 
-namespace Shina\Common\Device;
+namespace Shina\Common\Capacity;
 
 /**
  * Author: Leonardo Branco Shinagawa
