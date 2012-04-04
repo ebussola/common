@@ -32,6 +32,11 @@ class Number
      */
     protected $isNegative = false;
 
+    /**
+     * @var integer
+     */
+    static public $precision = 14;
+
     public function __construct($value, $config=Array())
     {
         $this->setValue($value);
@@ -53,6 +58,10 @@ class Number
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @return Number
+     */
     public function setValue($value)
     {
         if ($value instanceof Number)
@@ -84,11 +93,18 @@ class Number
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getValue()
     {
         return $this->value;
     }
 
+    /**
+     * @param string $dec_point
+     * @return Number
+     */
     public function setDecPoint($dec_point)
     {
         $this->dec_point = $dec_point;
@@ -96,11 +112,18 @@ class Number
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getDecPoint()
     {
         return $this->dec_point;
     }
 
+    /**
+     * @param integer $decimals
+     * @return Number
+     */
     public function setDecimals($decimals)
     {
         $this->decimals = $decimals;
@@ -108,11 +131,18 @@ class Number
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getDecimals()
     {
         return $this->decimals;
     }
 
+    /**
+     * @param string $thousand_point
+     * @return Number
+     */
     public function setThousandPoint($thousand_point)
     {
         $this->thousand_point = $thousand_point;
@@ -120,6 +150,9 @@ class Number
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getThousandPoint()
     {
         return $this->thousand_point;
@@ -135,6 +168,11 @@ class Number
         return null;
     }
 
+    /**
+     * @param $name
+     * @param $args
+     * @return int
+     */
     protected function bcCalc($name, $args)
     {
         /* @var Number $value */
@@ -161,7 +199,7 @@ class Number
         }
         else
         {
-            $result = $name($this->getValue(), $value->getValue(), 14);
+            $result = $name($this->getValue(), $value->getValue(), $this->getPrecision());
         }
 
         return $result;
@@ -172,14 +210,99 @@ class Number
         return $this->getNumberFormat();
     }
 
+    /**
+     * @return string
+     */
     public function toString()
     {
         return $this->getNumberFormat();
     }
 
+    /**
+     * @return bool
+     */
+    public function isNegative()
+    {
+        return !$this->isZero() && $this->isNegative;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPositive()
+    {
+        return !$this->isZero() && !$this->isNegative;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isZero()
+    {
+        return $this->getValue() == 0;
+    }
+
+    /**
+     * @param Number $number
+     * @return boolean
+     */
+    public function isGreater($number)
+    {
+        if ($number instanceof Number)
+        {
+            $number = $number->getValue();
+        }
+
+        return $this->getValue() > $number;
+    }
+
+    /**
+     * @param Number $number
+     * @return boolean
+     */
+    public function isLess($number)
+    {
+        if ($number instanceof Number)
+        {
+            $number = $number->getValue();
+        }
+
+        return $this->getValue() < $number;
+    }
+
+    /**
+     * @param Number $number
+     * @return bool
+     */
+    public function isEqual($number)
+    {
+        if ($number instanceof Number)
+        {
+            $number = $number->getValue();
+        }
+
+        return $this->getValue() == $number;
+    }
+
     protected function getNumberFormat()
     {
         return number_format((float)$this->getValue(), $this->getDecimals(), $this->getDecPoint(), $this->getThousandPoint());
+    }
+
+    /**
+     * @param int $precision
+     */
+    public function setPrecision($precision)
+    {
+        self::$precision = $precision;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPrecision()
+    {
+        return self::$precision;
     }
 
 }
