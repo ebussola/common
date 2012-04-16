@@ -179,7 +179,17 @@ class Number
         $value = current($args);
         if ($value instanceof Percentage)
         {
-            $value = $value->of($this);
+            switch ($name)
+            {
+                case 'bcmul' :
+                case 'bcdiv' :
+                    $value = $value->bcdiv(100);
+                    break;
+
+                default :
+                    $value = $value->of($this);
+                    break;
+            }
         }
         elseif (!$value instanceof Number)
         {
