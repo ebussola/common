@@ -163,4 +163,9 @@ class NumberRange extends Number
         return $this->diff;
     }
 
+    public function cutDiff()
+    {
+        $this->setValue($this->getValue());
+    }
+
 }
