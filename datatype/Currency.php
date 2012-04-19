@@ -80,6 +80,10 @@ class Currency extends Number
         {
             return new self($this->bcCalc($name, $args));
         }
+        else
+        {
+            trigger_error('Method do not exists. '.$name);
+        }
 
         return null;
     }

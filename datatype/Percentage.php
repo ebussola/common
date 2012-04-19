@@ -52,4 +52,30 @@ class Percentage extends Number
         }
     }
 
+    public function __call($name, $args)
+    {
+        if (substr($name, 0, 2) == 'bc')
+        {
+            return new self($this->bcCalc($name, $args));
+        }
+        else
+        {
+            trigger_error('Method do not exists. '.$name);
+        }
+
+        return null;
+    }
+
+    protected function bcCalc($name, $args)
+    {
+        /* @var Number $value */
+        $value = current($args);
+        if ($value instanceof Percentage)
+        {
+            $value = new Number($value);
+        }
+
+        return parent::bcCalc($name, array($value));
+    }
+
 }
