@@ -16,6 +16,8 @@ class Percentage extends Number
     protected $show_symbol = true;
 
     /**
+     * Percentage OF $number is how much Number?
+     *
      * @param Number $number
      * @return Number|Currency
      */

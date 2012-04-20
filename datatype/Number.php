@@ -304,6 +304,28 @@ class Number
     }
 
     /**
+     * Number OF $value is what percentage?
+     *
+     * @param Number|float $value
+     * @return Percentage
+     */
+    public function of($value)
+    {
+        return new Percentage($this->bcdiv($value)->bcmul(100));
+    }
+
+    /**
+     * Number IS $percentage of what Number?
+     *
+     * @param Number|float $percentage
+     * @return Number
+     */
+    public function is($percentage)
+    {
+        return $this->bcdiv($percentage);
+    }
+
+    /**
      * @param int $precision
      */
     public function setPrecision($precision)
