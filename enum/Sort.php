@@ -12,6 +12,13 @@ use Shina\Common\Datatype\Enum;
 class Sort extends Enum
 {
 
-    protected $_default = array('ASC', 'DESC');
+    /**
+     * @return array
+     * Return a list of options available.
+     */
+    public function defaults()
+    {
+        return array('ASC', 'DESC');
+    }
 
 }

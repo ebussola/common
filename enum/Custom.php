@@ -12,12 +12,26 @@ use Shina\Common\Datatype\Enum;
 class Custom extends Enum
 {
 
+    /**
+     * @var array
+     */
+    private $_default;
+
     public function __construct(array $values, $value='UNDEFINED')
     {
-        $values[] = 'UNDEFINED';
+        array_unshift($values, 'UNDEFINED');
         $this->_default = $values;
 
         parent::__construct($value);
+    }
+
+    /**
+     * @return array
+     * Return a list of available options.
+     */
+    public function defaults()
+    {
+        return $this->_default;
     }
 
 }
