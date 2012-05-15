@@ -1,8 +1,8 @@
-My common classes
+# My common classes #
 
 The autoloader to use with classes, feel free to implement yours
 
-<?php
+`<?php
 
 namespace Shina;
 
@@ -26,4 +26,4 @@ class Autoloader
         }
     }
 
-}
+}`
