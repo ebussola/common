@@ -1,5 +1,13 @@
 # My common classes #
 
+## Changes ##
+
+### v0.11 ###
+Significant changes on Enum.
+Using abstract method <i>default</i> insted of attribute <i>_default</i>
+
+## Autoloader ##
+
 The autoloader to use with classes, feel free to implement yours
 
     <?php
