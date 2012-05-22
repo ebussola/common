@@ -12,6 +12,14 @@ use Shina\Common\Datatype\Enum;
 class Type extends Enum
 {
 
-    protected $_default = array('DIR', 'FILE');
+    /**
+     * @return array
+     * Return a list of available options.
+     */
+    public function defaults()
+    {
+        return array('DIR', 'FILE');
+    }
+
 
 }
