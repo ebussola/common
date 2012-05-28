@@ -1,12 +1,18 @@
-# My common classes #
+My common classes
+=================
 
-## Changes ##
+Changes
+-------
+
+### v0.12 ###
+Changed Percentage class
 
 ### v0.11 ###
 Significant changes on Enum.
 Using abstract method <i>default</i> insted of attribute <i>_default</i>
 
-## Autoloader ##
+Autoloader
+-----------
 
 The autoloader to use with classes, feel free to implement yours
 

@@ -18,8 +18,11 @@ class Percentage extends Number
     /**
      * Percentage OF $number is how much Number?
      *
-     * @param Number $number
-     * @return Number|Currency
+     * @param Number | (numeric) $number
+     * @return Number
+     * Depending on the input, but always an object extended of Number
+     *
+     * @throws \InvalidArgumentException
      */
     public function of($number)
     {
