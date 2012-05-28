@@ -23,7 +23,18 @@ class Percentage extends Number
      */
     public function of($number)
     {
-        return $this->bcmul($number)->bcdiv(100);
+        $value = $this->bcmul($number)->bcdiv(100);
+        if ($number instanceof Number) {
+            $class = get_class($number);
+            $value = new $class($value);
+        } else {
+            if (is_numeric($number)) {
+                $value = new Number($value);
+            } else {
+                throw new \InvalidArgumentException();
+            }
+        }
+        return $value;
     }
 
     /**
