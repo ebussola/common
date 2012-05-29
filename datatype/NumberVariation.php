@@ -63,7 +63,7 @@ class NumberVariation extends Number
     {
         if ($limit_down instanceof Percentage)
         {
-            $limit_down = $limit_down->of($this);
+            $limit_down = $limit_down->of($this->getValue());
         }
         elseif (!$limit_down instanceof Number)
         {
@@ -93,7 +93,7 @@ class NumberVariation extends Number
     {
         if ($limit_up instanceof Percentage)
         {
-            $limit_up = $limit_up->of($this);
+            $limit_up = $limit_up->of($this->getValue());
         }
         elseif (!$limit_up instanceof Number)
         {
