@@ -4,6 +4,9 @@ My common classes
 Changes
 -------
 
+### v0.13 ###
+Added the option to set an Enum value by its index.
+
 ### v0.12 ###
 Changed Percentage class
 

@@ -33,17 +33,24 @@ abstract class Enum
     abstract public function defaults();
 
     /**
-     * @param string $value
+     * @param int | string $value
      * @throws \Exception
      */
     public function set($value)
     {
-        if (!in_array($value, $this->defaults()))
-        {
-            throw new \Exception('Wrong enumerator value');
+        if (is_string($value)) {
+            if (!in_array($value, $this->defaults())) {
+                throw new \Exception('Wrong enumerator value');
+            }
+        } else {
+            $defaults = $this->defaults();
+            if (!isset($defaults[$value])) {
+                throw new \Exception('Wrong enumerator value');
+            }
+            $value = $defaults[$value];
         }
 
-        $this->_value = (string)$value;
+        $this->_value = $value;
     }
 
     /**
