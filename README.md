@@ -4,6 +4,9 @@ My common classes
 Changes
 -------
 
+### dev ###
+Developing the first beta version
+
 ### v0.14 ###
 Changed the directories name to be in accordance to PSR-0
 

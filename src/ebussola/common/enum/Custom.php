@@ -1,14 +1,10 @@
 <?php
 
-namespace Shina\Common\Enum;
+namespace ebussola\common\enum;
 
-use Shina\Common\Datatype\Enum;
+use ebussola\common\datatype\Enum;
 
-/**
- * Author: Leonardo Branco Shinagawa
- * Date: 24/04/12
- * Time: 10:40
- */
+
 class Custom extends Enum
 {
 
@@ -32,6 +28,15 @@ class Custom extends Enum
     public function defaults()
     {
         return $this->_default;
+    }
+
+    /**
+     * @return String
+     * Return the name identifying the Enum class
+     */
+    public function enumId()
+    {
+        return __CLASS__;
     }
 
 }

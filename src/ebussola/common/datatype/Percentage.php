@@ -1,6 +1,6 @@
 <?php
 
-namespace Shina\Common\Datatype;
+namespace ebussola\common\datatype;
 
 /**
  * Author: Leonardo Branco Shinagawa
@@ -13,12 +13,12 @@ class Percentage extends Number
     /**
      * @var boolean
      */
-    protected $show_symbol = true;
+    private $show_symbol = true;
 
     /**
      * Percentage OF $number is how much Number?
      *
-     * @param Number | (numeric) $number
+     * @param Number|$number
      * @return Number
      * Depending on the input, but always an object extended of Number
      *
@@ -26,7 +26,8 @@ class Percentage extends Number
      */
     public function of($number)
     {
-        $value = $this->bcmul($number)->bcdiv(100);
+        $value = clone $this;
+        $value->bcmul($number)->bcdiv(100);
         if ($number instanceof Number) {
             $class = get_class($number);
             $value = new $class($value);
@@ -46,8 +47,7 @@ class Percentage extends Number
      */
     public function setShowSymbol($value)
     {
-        $this->show_symbol = $value;
-
+        $this->show_symbol = (bool)$value;
         return $this;
     }
 
@@ -58,40 +58,11 @@ class Percentage extends Number
 
     public function toString()
     {
-        if ($this->show_symbol)
-        {
+        if ($this->show_symbol) {
             return parent::toString() . '%';
-        }
-        else
-        {
+        } else  {
             return parent::toString();
         }
-    }
-
-    public function __call($name, $args)
-    {
-        if (substr($name, 0, 2) == 'bc')
-        {
-            return new self($this->bcCalc($name, $args));
-        }
-        else
-        {
-            trigger_error('Method do not exists. '.$name);
-        }
-
-        return null;
-    }
-
-    protected function bcCalc($name, $args)
-    {
-        /* @var Number $value */
-        $value = current($args);
-        if ($value instanceof Percentage)
-        {
-            $value = new Number($value);
-        }
-
-        return parent::bcCalc($name, array($value));
     }
 
 }

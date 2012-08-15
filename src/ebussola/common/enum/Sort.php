@@ -2,13 +2,9 @@
 
 namespace Shina\Common\Enum;
 
-use Shina\Common\Datatype\Enum;
+use ebussola\common\datatype\Enum;
 
-/**
- * Author: Leonardo Branco Shinagawa
- * Date: 24/04/12
- * Time: 10:36
- */
+
 class Sort extends Enum
 {
 
@@ -19,6 +15,15 @@ class Sort extends Enum
     public function defaults()
     {
         return array('ASC', 'DESC');
+    }
+
+    /**
+     * @return String
+     * Return the name identifying the Enum class
+     */
+    public function enumId()
+    {
+        return __CLASS__;
     }
 
 }

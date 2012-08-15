@@ -1,6 +1,6 @@
 <?php
 
-namespace Shina\Common\Capacity;
+namespace ebussola\common\capacity;
 
 /**
  * Author: Leonardo Branco Shinagawa

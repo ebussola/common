@@ -6,6 +6,8 @@ namespace Shina\Common\Datatype;
  * Author: Leonardo Branco Shinagawa
  * Date: 05/12/11
  * Time: 11:20
+ *
+ * @deprecated
  */
 class Currency extends Number
 {
