@@ -70,7 +70,7 @@ abstract class Enum implements Arrayable, Validateable
     {
         try {
             $this->validate();
-        } catch (\Exception $e) {
+        } catch (InvalidEnum $e) {
             return false;
         }
         return true;

@@ -1,22 +1,26 @@
 <?php
 
-namespace Shina\Common\Enum;
+namespace ebussola\common\datatype\path;
 
 use ebussola\common\datatype\Enum;
 
-
-class Sort extends Enum
+/**
+ * Author: Leonardo Branco Shinagawa
+ * Date: 28/12/11
+ * Time: 10:15
+ */
+class Type extends Enum
 {
 
     /**
      * @return array
-     * Return a list of options available.
+     * Return a list of available options.
      */
     public function defaults()
     {
         return array(
-            1 => 'ASC',
-            2 => 'DESC'
+            1 => 'DIR',
+            2 => 'FILE'
         );
     }
 
