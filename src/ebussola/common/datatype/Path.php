@@ -54,7 +54,9 @@ class Path implements Arrayable, Validateable
      */
     public function __construct($path)
     {
-        $this->setFullpath($path);
+        $this->fromArray(array(
+            'full_path' => $path
+        ));
     }
 
     public function __toString()
@@ -203,13 +205,13 @@ class Path implements Arrayable, Validateable
         );
         $values = array_merge($defaults, $values);
 
+        $this->setFullpath($values['full_path']);
         $this->type = $values['type'];
         $this->dirname = $values['dirname'];
         $this->basename = $values['basename'];
         $this->extension = $values['extension'];
         $this->filename = $values['filename'];
         $this->exists = $values['exists'];
-        $this->full_path = $values['full_path'];
     }
 
     /**

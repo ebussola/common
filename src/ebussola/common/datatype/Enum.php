@@ -24,7 +24,9 @@ abstract class Enum implements Arrayable, Validateable
 
     public function __construct($value)
     {
-        $this->set($value);
+        $this->fromArray(array(
+            'value' => $value
+        ));
     }
 
     /**
