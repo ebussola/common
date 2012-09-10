@@ -7,8 +7,7 @@ namespace ebussola\common\capacity;
  * Date: 26/03/12
  * Time: 13:54
  */
-interface Descriptable
-{
+interface Descriptable {
 
     /**
      * @abstract

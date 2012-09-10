@@ -9,15 +9,13 @@ use ebussola\common\datatype\Enum;
  * Date: 28/12/11
  * Time: 10:15
  */
-class Type extends Enum
-{
+class Type extends Enum {
 
     /**
      * @return array
      * Return a list of available options.
      */
-    public function defaults()
-    {
+    public function defaults() {
         return array(
             1 => 'DIR',
             2 => 'FILE'
@@ -28,8 +26,7 @@ class Type extends Enum
      * @return String
      * Return the name identifying the Enum class
      */
-    public function enumId()
-    {
+    public function enumId() {
         return __CLASS__;
     }
 

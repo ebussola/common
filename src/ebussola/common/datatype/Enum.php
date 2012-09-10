@@ -4,29 +4,29 @@ namespace ebussola\common\datatype;
 
 use ebussola\common\capacity\Arrayable;
 use ebussola\common\exception\InvalidEnum;
-use ebussola\common\capacity\Validateable;
+use ebussola\common\capacity\Validatable;
 
 /**
  * @version 1.0b
  */
-abstract class Enum implements Arrayable, Validateable
-{
+abstract class Enum implements Validatable {
 
     /**
      * @var String
      */
-    private $_value;
+    private $value;
 
     /**
      * @var Array
      */
     private $_indexes;
 
-    public function __construct($value)
-    {
-        $this->fromArray(array(
-            'value' => $value
-        ));
+    /**
+     * @param String | Integer $value
+     */
+    public function __construct($value=null) {
+        $this->set($value);
+        $this->_indexes = array();
     }
 
     /**
@@ -44,82 +44,61 @@ abstract class Enum implements Arrayable, Validateable
     abstract public function enumId();
 
     /**
-     * @return array
-     */
-    public function toArray()
-    {
-        return array(
-            'value' => $this->get()
-        );
-    }
-
-    /**
-     * @param array $values
-     */
-    public function fromArray(array $values)
-    {
-        $defaults = array('value' => null);
-        $values = array_merge($defaults, $values);
-        $this->set($values['value']);
-    }
-
-    /**
-     * Simple validation check
+     * @param bool $throwException
      * @return boolean
      * Returns True on success or False on fail
+     * If the flag $throwException is true, an \InvalidArgumentException will be throwed on fail
      */
-    public function isValid()
-    {
-        try {
-            $this->validate();
-        } catch (InvalidEnum $e) {
-            return false;
+    public function isValid($throwException = false) {
+        if (!in_array($this->value, $this->defaults())) {
+            if ($throwException) {
+                throw new InvalidEnum("Wrong enumerator value ({$this->enumId()})");
+            } else {
+                return false;
+            }
         }
         return true;
     }
 
     /**
-     * @return boolean
-     * Returns True if validation pass or throw an Exception on fail
-     * @throws InvalidEnum
+     * Alias to setValue
+     * @param Integer | String $value
      */
-    public function validate()
-    {
-        if (!in_array($this->_value, $this->defaults())) {
-            $invalid_enum = new InvalidEnum('Wrong enumerator value');
-            $invalid_enum->setClassName($this->enumId());
-            throw $invalid_enum;
-        }
-        return true;
+    public function set($value) {
+        $this->set($value);
     }
 
     /**
      * @param Integer | String $value
      */
-    public function set($value)
-    {
+    public function setValue($value) {
         if (!is_string($value)) {
             $defaults = $this->defaults();
             $value = (isset($defaults[$value])) ? $defaults[$value] : null;
         }
-        $this->_value = $value;
+        $this->value = $value;
+    }
+
+    /**
+     * Alias to getValue
+     * @return String
+     */
+    public function get() {
+        return $this->getValue();
     }
 
     /**
      * @return String
      */
-    public function get()
-    {
-        return $this->_value;
+    public function getValue() {
+        return $this->value;
     }
 
     /**
      * @return Integer
      */
-    public function index()
-    {
-        if (is_null($this->_indexes)) {
-            $this->_indexes = array();
+    public function getIndex() {
+        if (count($this->_indexes) == 0) {
             foreach ($this->defaults() as $i => $v) {
                 $this->_indexes[$v] = $i;
             }
@@ -127,8 +106,10 @@ abstract class Enum implements Arrayable, Validateable
         return $this->_indexes[$this->get()];
     }
 
-    public function __toString()
-    {
+    /**
+     * @return String
+     */
+    public function __toString() {
         return $this->get();
     }
 

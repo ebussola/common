@@ -3,29 +3,24 @@
 namespace ebussola\common\datatype;
 
 use ebussola\common\capacity\Arrayable;
-use ebussola\common\capacity\Validateable;
+use ebussola\common\exception\InvalidNumber;
+use ebussola\common\capacity\Validatable;
 
 
 /**
- * @method Number bcadd($number)
- * @method Number bcsub($number)
- * @method Number bcmul($number)
- * @method Number bcdiv($number)
+ * @method \ebussola\common\datatype\Number bcadd($number)
+ * @method \ebussola\common\datatype\Number bcsub($number)
+ * @method \ebussola\common\datatype\Number bcmul($number)
+ * @method \ebussola\common\datatype\Number bcdiv($number)
  *
  * @version 1.0b
  */
-class Number implements Arrayable, Validateable
-{
+class Number implements Validatable {
 
     /**
      * @var string
      */
     private $value;
-
-    /**
-     * @var number\Locale
-     */
-    private $locale;
 
     /**
      * @var int
@@ -42,43 +37,37 @@ class Number implements Arrayable, Validateable
      */
     private $precision = 14;
 
-    public function __construct($value, number\Locale $locale=null)
-    {
-        $this->locale = new number\pt_BR();
+    /**
+     * @param string $value
+     */
+    public function __construct($value = 0) {
+        if (!extension_loaded('bcmath')) {
+            trigger_error('bcmath not loaded, please install the extension: http://php.net/manual/en/book.bc.php');
+        }
+
         $this->setValue($value);
     }
 
     /**
-     * @param string $value
+     * @param string|\ebussola\common\datatype\Number $value
      * @return Number
      */
-    public function setValue($value)
-    {
-        if ($value instanceof Number)
-        {
+    public function setValue($value) {
+        if ($value instanceof Number) {
             $value = $value->getValue();
-        }
-        elseif (is_null($value) || $value == '')
-        {
+        } elseif (is_null($value) || $value == '') {
             $value = 0;
         }
 
-        if (strstr($value, ','))
-        {
-            $value = str_replace('.', '', $value);
-            $value = str_replace(',', '.', $value);
-        }
+        $value = $this->normalize($value);
 
-        $value = preg_replace('/([^-0-9]*)([-]?)([0-9.]*).*/is', '$2$3', $value);
-        if ($value < 0)
-        {
+        $value = preg_replace('/([^-0-9]*)([-]?)([0-9.]*).*/is', '$2$3', $value); //Clean all invalid chars
+        if ($value < 0) {
             $this->isNegative = true;
-        }
-        else
-        {
+        } else {
             $this->isNegative = false;
         }
-        $this->value = (string) $value;
+        $this->value = (string)$value;
 
         return $this;
     }
@@ -86,25 +75,15 @@ class Number implements Arrayable, Validateable
     /**
      * @return string
      */
-    public function getValue()
-    {
+    public function getValue() {
         return $this->value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDecPoint()
-    {
-        return $this->locale->getDecPoint();
     }
 
     /**
      * @param integer $decimals
      * @return Number
      */
-    public function setDecimals($decimals)
-    {
+    public function setDecimals($decimals) {
         $this->decimals = $decimals;
 
         return $this;
@@ -113,25 +92,15 @@ class Number implements Arrayable, Validateable
     /**
      * @return int
      */
-    public function getDecimals()
-    {
+    public function getDecimals() {
         return $this->decimals;
     }
 
-    /**
-     * @return string
-     */
-    public function getThousandPoint()
-    {
-        return $this->locale->getThousandPoint();
-    }
-
-    public function __call($name, $args)
-    {
+    public function __call($name, $args) {
         if (substr($name, 0, 2) == 'bc') {
             $this->value = $this->bcCalc($name, $args);
         } else {
-            throw new \Exception('Method do not exists. '.$name);
+            throw new \Exception('Method do not exists. ' . $name);
         }
 
         return $this;
@@ -140,25 +109,20 @@ class Number implements Arrayable, Validateable
     /**
      * @param $name
      * @param $args
-     * @return int
+     * @return String
      */
-    protected function bcCalc($name, $args)
-    {
-        if (!extension_loaded('bcmath')) {
-            trigger_error('bcmath not loaded, please install the extension: http://php.net/manual/en/book.bc.php');
-        }
-
+    protected function bcCalc($name, $args) {
         /* @var Number $value */
         $value = current($args);
-        if ($value instanceof Percentage) {
+        if ($value instanceof number\Percentage) {
             switch ($name) {
                 case 'bcmul' :
                 case 'bcdiv' :
-                    $value = $value->bcdiv(100);
+                    $value->bcdiv(100);
                     break;
 
                 default :
-                    $value = $value->of($this);
+                    $value->of($this);
                     break;
             }
         } elseif (!$value instanceof Number) {
@@ -178,49 +142,39 @@ class Number implements Arrayable, Validateable
         return $result;
     }
 
-    public function __toString()
-    {
-        return $this->getNumberFormat();
-    }
-
     /**
      * @return string
      */
-    public function toString()
-    {
+    public function __toString() {
         return $this->getNumberFormat();
     }
 
     /**
      * @return bool
      */
-    public function isNegative()
-    {
-        return !$this->isZero() && $this->isNegative;
+    public function isNegative() {
+        return (!$this->isZero() && $this->isNegative);
     }
 
     /**
      * @return bool
      */
-    public function isPositive()
-    {
-        return !$this->isZero() && !$this->isNegative;
+    public function isPositive() {
+        return (!$this->isZero() && !$this->isNegative);
     }
 
     /**
      * @return bool
      */
-    public function isZero()
-    {
+    public function isZero() {
         return bccomp($this->getValue(), 0) === 0;
     }
 
     /**
-     * @param Number|Float $number
+     * @param \ebussola\common\datatype\Number|String $number
      * @return boolean
      */
-    public function isGreater($number)
-    {
+    public function isGreater($number) {
         if ($number instanceof Number) {
             $number = $number->getValue();
         }
@@ -229,11 +183,10 @@ class Number implements Arrayable, Validateable
     }
 
     /**
-     * @param Number|Float $number
+     * @param \ebussola\common\datatype\Number|String $number
      * @return boolean
      */
-    public function isLess($number)
-    {
+    public function isLess($number) {
         if ($number instanceof Number) {
             $number = $number->getValue();
         }
@@ -242,11 +195,10 @@ class Number implements Arrayable, Validateable
     }
 
     /**
-     * @param Number|Float $number
+     * @param \ebussola\common\datatype\Number|String $number
      * @return bool
      */
-    public function isEqual($number)
-    {
+    public function isEqual($number) {
         if ($number instanceof Number) {
             $number = $number->getValue();
         }
@@ -257,13 +209,12 @@ class Number implements Arrayable, Validateable
     /**
      * Number OF $value is what percentage?
      *
-     * @param Number|Float $value
-     * @return Percentage
+     * @param \ebussola\common\datatype\Number|String $value
+     * @return number\Percentage
      */
-    public function of($value)
-    {
+    public function of($value) {
         $number = clone $this;
-        return new Percentage($number->bcdiv($value)->bcmul(100)->getValue());
+        return new number\Percentage($number->bcdiv($value)->bcmul(100)->getValue());
     }
 
     /**
@@ -272,8 +223,7 @@ class Number implements Arrayable, Validateable
      * @param Number|float $percentage
      * @return Number
      */
-    public function is($percentage)
-    {
+    public function is($percentage) {
         $number = clone $this;
         return $number->bcdiv($percentage);
     }
@@ -281,94 +231,72 @@ class Number implements Arrayable, Validateable
     /**
      * @param int $precision
      */
-    public function setPrecision($precision)
-    {
+    public function setPrecision($precision) {
         $this->precision = $precision;
     }
 
     /**
      * @return int
      */
-    public function getPrecision()
-    {
+    public function getPrecision() {
         return $this->precision;
     }
 
     /**
-     * @param \ebussola\common\datatype\number\Locale $locale
+     * @param bool $throwException
+     * @return boolean
+     * Returns True on success or False on fail
+     * If the flag $throwException is true, an \InvalidArgumentException will be throwed on fail
      */
-    public function setLocale(number\Locale $locale)
-    {
-        $this->locale = $locale;
+    public function isValid($throwException = false) {
+        if (!is_numeric($this->value)) {
+            if ($throwException) {
+                throw new InvalidNumber("Invalid value, must be an numeric value.");
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
      * @return string
      */
-    private function getNumberFormat()
-    {
-        return number_format((float)$this->getValue(), $this->getDecimals(), $this->getDecPoint(), $this->getThousandPoint());
+    private function getNumberFormat() {
+        $numberFormatter = new \NumberFormatter(\Locale::getDefault(), \NumberFormatter::DECIMAL);
+        $decPoint = $numberFormatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
+        $thousandPoint = $numberFormatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
+
+        return number_format((float)$this->getValue(), $this->getDecimals(), $decPoint, $thousandPoint);
     }
 
     /**
-     * @return array
+     * @param String $number
+     * @return String
      */
-    public function toArray()
-    {
-        return array(
-            'value' => $this->getValue()
-        );
+    private function normalize($number) {
+        $numberFormatter = new \NumberFormatter(\Locale::getDefault(), \NumberFormatter::DECIMAL);
+        $decPoint = $numberFormatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
+        $thousandPoint = $numberFormatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
+        if (strstr($number, $decPoint)) {
+            $number = str_replace($thousandPoint, '', $number);
+            $number = str_replace($decPoint, '.', $number);
+        }
+        return $number;
     }
 
     /**
-     * @param array $values
+     * @param boolean $bool
      */
-    public function fromArray(array $values)
-    {
-        $defaults = array(
-            'value' => 0
-        );
-        $values = array_merge($defaults, $values);
-        $this->setValue($values['value']);
+    protected function setIsNegative($bool) {
+        $this->isNegative = (bool)$bool;
     }
 
     /**
-     * Simple validation check
-     * @return boolean
-     * Returns True on success or False on fail
+     * @param String $value
      */
-    public function isValid()
-    {
-        try {
-            $this->validate();
-        } catch (\ebussola\common\exception\InvalidNumber $e) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Exceptions must be documented with <at>throws
-     * @return boolean
-     * Returns True if validation pass or throw an Exception on fail
-     */
-    public function validate()
-    {
-        $invalid_number = new \ebussola\common\exception\InvalidNumber();
-        $invalid_number->setClassName(__DIR__);
-
-        if ($this->value === null) {
-            $invalid_number->addAttributeName('value');
-        }
-        if (!$this->locale instanceof number\Locale) {
-            $invalid_number->addAttributeName('locale');
-        }
-
-        if (count($invalid_number->getAttributeNames()) > 0) {
-            throw $invalid_number;
-        }
-
-        return true;
+    protected function setRawValue($value) {
+        $this->value = $value;
     }
 
 }

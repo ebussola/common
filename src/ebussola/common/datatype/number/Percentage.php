@@ -1,31 +1,31 @@
 <?php
 
-namespace ebussola\common\datatype;
+namespace ebussola\common\datatype\number;
+
+use ebussola\common\datatype\Number;
 
 /**
  * Author: Leonardo Branco Shinagawa
  * Date: 17/01/12
  * Time: 14:26
  */
-class Percentage extends Number
-{
+class Percentage extends Number {
 
     /**
      * @var boolean
      */
-    private $show_symbol = true;
+    private $showSymbol = true;
 
     /**
      * Percentage OF $number is how much Number?
      *
-     * @param Number|$number
+     * @param Number|String $number
      * @return Number
      * Depending on the input, but always an object extended of Number
      *
      * @throws \InvalidArgumentException
      */
-    public function of($number)
-    {
+    public function of($number) {
         $value = clone $this;
         $value->bcmul($number)->bcdiv(100);
         if ($number instanceof Number) {
@@ -45,23 +45,19 @@ class Percentage extends Number
      * @param boolean $value
      * @return Percentage
      */
-    public function setShowSymbol($value)
-    {
-        $this->show_symbol = (bool)$value;
+    public function setShowSymbol($value) {
+        $this->showSymbol = (bool)$value;
         return $this;
     }
 
-    public function __toString()
-    {
-        return $this->toString();
-    }
-
-    public function toString()
-    {
-        if ($this->show_symbol) {
-            return parent::toString() . '%';
-        } else  {
-            return parent::toString();
+    /**
+     * @return string
+     */
+    public function __toString() {
+        if ($this->showSymbol) {
+            return parent::__toString() . '%';
+        } else {
+            return parent::__toString();
         }
     }
 

@@ -7,8 +7,7 @@ namespace ebussola\common\capacity;
  * Date: 23/03/12
  * Time: 14:36
  */
-interface Prioritable
-{
+interface Prioritable {
 
     /**
      * @abstract

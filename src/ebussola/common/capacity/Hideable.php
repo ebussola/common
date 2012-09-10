@@ -7,8 +7,7 @@ namespace ebussola\common\capacity;
  * Date: 29/03/12
  * Time: 15:14
  */
-interface Hideable
-{
+interface Hideable {
 
     /**
      * @abstract

@@ -7,7 +7,6 @@ namespace ebussola\common\exception;
  * Date: 15/08/12
  * Time: 00:04
  */
-class InvalidNumber extends InvalidObject
-{
+class InvalidNumber extends \Exception {
 
 }

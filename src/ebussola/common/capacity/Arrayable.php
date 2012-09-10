@@ -7,8 +7,7 @@ namespace ebussola\common\capacity;
  * Date: 14/08/12
  * Time: 11:16
  */
-interface Arrayable
-{
+interface Arrayable {
 
     /**
      * @abstract

@@ -7,7 +7,6 @@ namespace ebussola\common\exception;
  * Date: 15/08/12
  * Time: 20:33
  */
-class InvalidUrl extends InvalidObject
-{
+class InvalidUrl extends \Exception {
 
 }
