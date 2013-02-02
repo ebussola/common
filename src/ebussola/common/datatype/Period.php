@@ -1,8 +1,6 @@
 <?php
 
-namespace Shina\Common\Datatype;
-
-use Shina\Common\Datatype\Date;
+namespace ebussola\common\datatype;
 
 /**
  * Author: Leonardo Branco Shinagawa
@@ -27,19 +25,15 @@ class Period extends \DatePeriod
      */
     private $interval;
 
-    public function __construct(\DateTime $start, $interval, $end)
-    {
-        if (!$interval instanceof \DateInterval)
-        {
+    public function __construct(\DateTime $start, $interval, $end) {
+        if (!$interval instanceof \DateInterval) {
             $interval = new \DateInterval("P{$interval}D");
         }
 
-        if (!$end instanceof \DateTime)
-        {
+        if (!$end instanceof \DateTime) {
             $recurrences = $end;
             $end = clone $start;
-            for ($i=0 ; $i<=$recurrences ; $i++)
-            {
+            for ($i=0 ; $i<=$recurrences ; $i++) {
                 $end = $end->add($interval);
             }
         }
@@ -54,35 +48,30 @@ class Period extends \DatePeriod
     /**
      * @return \DateTime
      */
-    public function start()
-    {
+    public function start() {
         return $this->start;
     }
 
     /**
      * @return \DateTime
      */
-    public function end()
-    {
+    public function end() {
         return $this->end;
     }
 
     /**
      * @return \DateInterval
      */
-    public function interval()
-    {
+    public function interval() {
         return $this->interval;
     }
 
     /**
      * @return integer
      */
-    public function count()
-    {
+    public function count() {
         $i = 0;
-        foreach ($this as $date)
-        {
+        foreach ($this as $date) {
             $i++;
         }
         return $i;
