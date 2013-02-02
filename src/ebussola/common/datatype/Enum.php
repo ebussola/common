@@ -24,7 +24,7 @@ abstract class Enum implements Validatable {
     /**
      * @param String | Integer $value
      */
-    public function __construct($value=null) {
+    public function __construct($value='UNDEFINED') {
         $this->set($value);
         $this->_indexes = array();
     }
@@ -37,6 +37,8 @@ abstract class Enum implements Validatable {
     abstract public function defaults();
 
     /**
+     * Generally return __CLASS__ is the best fit ;)
+     *
      * @abstract
      * @return String
      * Return the name identifying the Enum class
@@ -65,7 +67,7 @@ abstract class Enum implements Validatable {
      * @param Integer | String $value
      */
     public function set($value) {
-        $this->set($value);
+        $this->setValue($value);
     }
 
     /**

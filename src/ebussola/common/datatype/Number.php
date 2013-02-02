@@ -2,16 +2,15 @@
 
 namespace ebussola\common\datatype;
 
-use ebussola\common\capacity\Arrayable;
 use ebussola\common\exception\InvalidNumber;
 use ebussola\common\capacity\Validatable;
 
 
 /**
- * @method \ebussola\common\datatype\Number bcadd($number)
- * @method \ebussola\common\datatype\Number bcsub($number)
- * @method \ebussola\common\datatype\Number bcmul($number)
- * @method \ebussola\common\datatype\Number bcdiv($number)
+ * @method \ebussola\common\datatype\Number bcadd($number) make the calc and return itself
+ * @method \ebussola\common\datatype\Number bcsub($number) make the calc and return itself
+ * @method \ebussola\common\datatype\Number bcmul($number) make the calc and return itself
+ * @method \ebussola\common\datatype\Number bcdiv($number) make the calc and return itself
  *
  * @version 1.0b
  */
@@ -97,7 +96,7 @@ class Number implements Validatable {
     }
 
     public function __call($name, $args) {
-        if (substr($name, 0, 2) == 'bc') {
+        if (substr($name, 0, 2) === 'bc') {
             $this->value = $this->bcCalc($name, $args);
         } else {
             throw new \Exception('Method do not exists. ' . $name);
@@ -112,7 +111,6 @@ class Number implements Validatable {
      * @return String
      */
     protected function bcCalc($name, $args) {
-        /* @var Number $value */
         $value = current($args);
         if ($value instanceof number\Percentage) {
             switch ($name) {
@@ -257,6 +255,16 @@ class Number implements Validatable {
             }
         }
         return true;
+    }
+
+    /**
+     * Used to make calculations without change the value
+     * Instead of change the value of itself, preserve it and return the calculated value
+     *
+     * @return Number
+     */
+    public function preserve() {
+        return clone $this;
     }
 
     /**
