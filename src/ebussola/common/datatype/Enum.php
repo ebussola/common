@@ -74,9 +74,10 @@ abstract class Enum implements Validatable {
      * @param Integer | String $value
      */
     public function setValue($value) {
-        if (!is_string($value)) {
+        if (is_numeric($value)) {
+            $index = (int) $value; // Force the numeric value to be integer
             $defaults = $this->defaults();
-            $value = (isset($defaults[$value])) ? $defaults[$value] : null;
+            $value = (isset($defaults[$index])) ? $defaults[$index] : null;
         }
         $this->value = $value;
     }
