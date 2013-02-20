@@ -56,7 +56,6 @@ namespace ebussola\common;
  * @method ArrayList unshift            Prepend one or more elements to the beginning of an array
  * @method ArrayList values             Return all the values of an array
  * @method ArrayList walk_recursive     Apply a user function recursively to every member of an array
- * @method ArrayList walk               Apply a user function to every member of an array
  */
 class ArrayList extends \ArrayObject {
 
@@ -82,4 +81,18 @@ class ArrayList extends \ArrayObject {
 
         return $result;
     }
+
+    /**
+     * Apply a user function to every member of an array
+     *
+     * @param Callable $callback
+     * @return bool
+     */
+    public function walk(Callable $callback) {
+        $arrayCopy = $this->getArrayCopy();
+        $result = array_walk($arrayCopy, $callback);
+        $this->exchangeArray($arrayCopy);
+        return $result;
+    }
+
 }
