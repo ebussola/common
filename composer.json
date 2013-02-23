@@ -14,7 +14,8 @@
     },
     "autoload" : {
         "psr-0" : {
-            "ebussola\\common" : "src/"
+            "ebussola\\common" : "src/",
+            "ebussola\\akelos" : "src/"
         }
     }
 }
