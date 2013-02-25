@@ -11,9 +11,18 @@ use ebussola\common\datatype\Number;
  */
 class Currency extends Number {
 
+    /**
+     * @var string
+     */
+    private static $globalFormat;
+
+    /**
+     * @var string
+     */
+    private $format;
+
     public function __toString() {
-        $numberFormatter = new \NumberFormatter(\Locale::getDefault(), \NumberFormatter::CURRENCY);
-        $result = $numberFormatter->format($this->getValue());
+        $result = $this->format();
         if ($this->isNegative()) {
             $result = '(' . str_replace('-', '', $result) . ')';
         }
@@ -34,6 +43,45 @@ class Currency extends Number {
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $format
+     * {symbol} the currency symbol
+     * {number} the value formatted
+     */
+    public function setFormat($format) {
+        $this->format = $format;
+    }
+
+    /**
+     * @param string $globalFormat
+     * @see setFormat
+     */
+    public static function setGlobalFormat($globalFormat) {
+        self::$globalFormat = $globalFormat;
+    }
+
+    private function format() {
+        $numberFormatter = new \NumberFormatter(\Locale::getDefault(), \NumberFormatter::CURRENCY);
+        $result = $numberFormatter->format($this->getValue());
+
+        if ($this->format !== null || self::$globalFormat !== null) {
+            // need a special format?
+
+            if ($this->format === null) {
+                // if the local format was not setted, the global format is used
+                $this->format = self::$globalFormat;
+            }
+
+            $symbol = $numberFormatter->getSymbol(\NumberFormatter::CURRENCY_SYMBOL);
+            $number = trim(str_replace($symbol, '', $result));
+
+            $result = str_replace('{symbol}', $symbol, $this->format);
+            $result = str_replace('{number}', $number, $result);
+        }
+
+        return $result;
     }
 
 }
