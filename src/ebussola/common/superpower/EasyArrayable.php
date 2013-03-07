@@ -38,16 +38,9 @@ trait EasyArrayable {
     public function fromArray(Array $values) {
         $inflector = new \ebussola\akelos\Inflector();
         foreach ($values as $key => $value) {
-            if (is_array($value)) {
-                $methodName = 'add' . $inflector->camelize($key);
-                foreach ($value as $v) {
-                    $this->$methodName($v);
-                }
-            } else {
-                $methodName = 'set' . $inflector->camelize($key);
-                if (method_exists($this, $methodName)) {
-                    $this->$methodName($value);
-                }
+            $methodName = 'set' . $inflector->camelize($key);
+            if (method_exists($this, $methodName)) {
+                $this->$methodName($value);
             }
         }
     }
