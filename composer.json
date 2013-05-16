@@ -10,7 +10,8 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "ext-bcmath": "*"
+        "ext-bcmath": "*",
+        "mockery/mockery": "*"
     },
     "autoload" : {
         "psr-0" : {
