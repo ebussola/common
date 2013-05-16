@@ -17,7 +17,7 @@ class Time extends DateTime
 
     public function __construct($time = 'now', \DateTimeZone $timezone = null) {
         parent::__construct($time, $timezone);
-        $this->setDate(0, 0, 0);
+        $this->setDate(1, 1, 1);
     }
 
     public function __toString() {
