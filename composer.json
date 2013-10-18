@@ -1,7 +1,6 @@
 {
     "name": "ebussola/common",
     "type": "library",
-    "version":"0.17",
     "description": "Common classes including Number, Currency, Date, Enum, ArrayList and more",
     "keywords": ["datatype", "arraylist", "currency", "datetime", "period", "enum"],
     "license": "MIT",
